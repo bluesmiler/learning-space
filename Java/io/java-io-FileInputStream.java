@@ -1,3 +1,0 @@
-InputStream
-FileInputStream
-BufferedInputStream

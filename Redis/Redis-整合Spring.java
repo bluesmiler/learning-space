@@ -1,12 +1,12 @@
 ---------------------------
-Redis-ÕûºÏspring			|
+Redis-æ•´åˆspring			|
 ---------------------------
 
-<!-- ÒıÈëÍâ²¿ÎÄ¼ş -->
+<!-- å¼•å…¥å¤–éƒ¨æ–‡ä»¶ -->
 <context:property-placeholder location="classpath:redis.properties" ignore-unresolvable="true"/>
-<!-- Á¬½Ó³ØÅäÖÃ -->
+<!-- è¿æ¥æ± é…ç½® -->
 <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
-	<!-- ×î´óÁ¬½ÓÊı -->
+	<!-- æœ€å¤§è¿æ¥æ•° -->
 	<property name="maxTotal" value="${redis.maxTotal}"/>
 
 	<property name="testWhileIdle" value="${redis.testWhileIdle}"/>
@@ -15,17 +15,17 @@ Redis-ÕûºÏspring			|
 	<property name="maxIdle" value="${redis.maxIdle}"/>
 	<property name="minIdle" value="${redis.minIdle}"/>
 </bean>
-<!-- ·ÖÆ¬Ê½Á¬½Ó³Ø -->
+<!-- åˆ†ç‰‡å¼è¿æ¥æ±  -->
 <bean class="redis.clients.jedis.ShardedJedisPool" destroy-method="close">
 	<constructor-arg index="0" ref="jedisPoolConfig"/>
 	<constructor-arg index="1">
 		<list>
-			<!-- ¼¯ÈºµÄ½Úµã1ĞÅÏ¢ -->
+			<!-- é›†ç¾¤çš„èŠ‚ç‚¹1ä¿¡æ¯ -->
 			<bean class="redis.clients.jedis.JedisShardInfo">
 				<constructor-arg index="0" value="${redis.node1.ip}"/>
 				<constructor-arg index="1" value="${redis.node1.port}"/>
 			</bean>
-			<!-- ¼¯ÈºµÄ½Úµã2ĞÅÏ¢ 
+			<!-- é›†ç¾¤çš„èŠ‚ç‚¹2ä¿¡æ¯ 
 			<bean class="redis.clients.jedis.JedisShardInfo">
 				<constructor-arg index="0" value="${redis.node2.ip}"/>
 				<constructor-arg index="1" value="${redis.node2.port}"/>
@@ -40,7 +40,7 @@ redis.node1.ip=127.0.0.1
 redis.node1.port=6379
 
 ---------------------------
-Redis-´úÂëÉè¼ÆË¼Ïë			|
+Redis-ä»£ç è®¾è®¡æ€æƒ³			|
 ---------------------------
 
 **
@@ -51,21 +51,21 @@ public class RedisService {
 	@Autowired
 	private ShardedJedisPool shardedJedisPool;
 	/**
-	 * Íù»º´æÖĞÌí¼Ó¼ÇÂ¼
+	 * å¾€ç¼“å­˜ä¸­æ·»åŠ è®°å½•
 	 * */
 	private <T> T execut(Function<ShardedJedis ,T> fun){
 		 ShardedJedis shardedJedis = null;
 	        try{
-	        	// »ñÈ¡RedisÁ¬½Ó
+	        	// è·å–Redisè¿æ¥
 	        	shardedJedis = shardedJedisPool.getResource();
 	        	return fun.callback(shardedJedis);
 	        }finally{
-	        	 //¹Ø±ÕÁ¬½Ó
+	        	 //å…³é—­è¿æ¥
 	            shardedJedis.close();
 	        }
 	}
 	/**
-	 * ÉèÖÃÖµ
+	 * è®¾ç½®å€¼
 	 * */
 	public String set(final String key,final String value){
 		return this.execut(new Function<ShardedJedis, String>() {
@@ -75,8 +75,8 @@ public class RedisService {
 		});
 	}
 	/**
-	 * ÉèÖÃÖµ,Í¬Ê±ÉèÖÃÉú´æÊ±¼ä
-	 * µ¥Î»ÎªÃë
+	 * è®¾ç½®å€¼,åŒæ—¶è®¾ç½®ç”Ÿå­˜æ—¶é—´
+	 * å•ä½ä¸ºç§’
 	 * */
 	public String set(final String key,final String value,final Integer seconds){
 		return this.execut(new Function<ShardedJedis, String>() {
@@ -88,7 +88,7 @@ public class RedisService {
 		});
 	}
 	/**
-	 * »ñÈ¡Öµ
+	 * è·å–å€¼
 	 * */
 	public String get(String key){
 		return this.execut(new Function<ShardedJedis, String>() {
@@ -98,7 +98,7 @@ public class RedisService {
 		});
 	}
 	/**
-	 * ¸ù¾İKeyÉ¾³ıÊı¾İ
+	 * æ ¹æ®Keyåˆ é™¤æ•°æ®
 	 * */
 	public Long delete(String key){
 		return this.execut(new Function<ShardedJedis, Long>() {
@@ -108,7 +108,7 @@ public class RedisService {
 		});
 	}
 	/**
-	 * ¸ù¾İKeyÉ¾³ıÊı¾İ
+	 * æ ¹æ®Keyåˆ é™¤æ•°æ®
 	 * */
 	public Long expire(String key,Integer seconnds){
 		return this.execut(new Function<ShardedJedis, Long>() {
@@ -141,7 +141,7 @@ public class RedisService {
     private ShardedJedisPool shardedJedisPool;
 
     /**
-     * »Øµ÷Ö´ĞĞ
+     * å›è°ƒæ‰§è¡Œ
      * @param fun
      * @param <T>
      * @return
@@ -149,17 +149,17 @@ public class RedisService {
     private <T> T execute(Function<ShardedJedis,T> fun){
         ShardedJedis shardedJedis = null;
         try{
-            // »ñÈ¡RedisÁ¬½Ó
+            // è·å–Redisè¿æ¥
             shardedJedis = shardedJedisPool.getResource();
             return fun.apply(shardedJedis);
         }finally{
-            //¹Ø±ÕÁ¬½Ó
+            //å…³é—­è¿æ¥
             shardedJedis.close();
         }
     }
 
     /**
-     * Ìí¼ÓĞÂµÄÖµµ½redis
+     * æ·»åŠ æ–°çš„å€¼åˆ°redis
      * @param key
      * @param value
      * @return
@@ -169,7 +169,7 @@ public class RedisService {
     }
 
     /**
-     * Ìí¼ÓĞÂµÄÖµµ½»º´æ,²¢ÇÒÉèÖÃÉúÃüÖÜÆÚ
+     * æ·»åŠ æ–°çš„å€¼åˆ°ç¼“å­˜,å¹¶ä¸”è®¾ç½®ç”Ÿå‘½å‘¨æœŸ
      * @param key
      * @param value
      * @param seconds
@@ -184,7 +184,7 @@ public class RedisService {
     }
 
     /**
-     * ¸ù¾İkey³¢ÊÔ¶ÁÈ¡Ò»¸öÖµ
+     * æ ¹æ®keyå°è¯•è¯»å–ä¸€ä¸ªå€¼
      * @param key
      * @return
      */
@@ -193,7 +193,7 @@ public class RedisService {
     }
 
     /**
-     * ¸ù¾İkey³¢ÊÔÉ¾³ıÒ»¸öÖµ
+     * æ ¹æ®keyå°è¯•åˆ é™¤ä¸€ä¸ªå€¼
      * @param key
      * @return
      */
@@ -202,7 +202,7 @@ public class RedisService {
     }
 
     /**
-     * ¸ù¾İkey,ÉèÖÃÖµµÄÉúÃüÖÜÆÚ
+     * æ ¹æ®key,è®¾ç½®å€¼çš„ç”Ÿå‘½å‘¨æœŸ
      * @param key
      * @param seconnds
      * @return
