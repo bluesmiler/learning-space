@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.store.dao.GoodsDao">
+    <resultMap id="BaseMap" type="com.pm.entity.Goods">
+        <id column="sh_id" property="id"></id>
+        <result column="sh_name" property="name"></result>
+        <result column="sh_price" property="price"></result>
+        <result column="sh_content" property="content"></result>
+        <result column="sh_image" property="image"></result>
+        <result column="sh_image_name" property="imageReName"></result>
+        <association property="goodType"  column="id" javaType="com.pm.entity.GoodType"
+                     select="com.pm.store.dao.GoodTypeDao.findById">
+        </association>
+    </resultMap>
+
+    <insert id="save">
+        INSERT INTO tb_good(sh_name,sh_price,sh_content,sh_image,sh_image_name,id)
+        VALUES
+        (#{name}, #{price}, #{content},#{image},#{imageReName},#{goodType.id})
+    </insert>
+
+    <select id="findAll" resultMap="BaseMap">
+        SELECT *FROM  tb_good
+    </select>
+
+    <select id="findByName" resultMap="BaseMap">
+        SELECT *FROM  tb_good where sh_name=#{name}
+    </select>
+
+    <delete id="delete">
+        DELETE FROM tb_good WHERE sh_id=#{id}
+    </delete>
+
+    <select id="findById" resultMap="BaseMap">
+        SELECT *FROM  tb_good where sh_id=#{id}
+    </select>
+
+    <select id="getCount" resultType="int">
+        SELECT count(sh_id) FROM tb_good
+    </select>
+
+    <select id="findByTypeId" resultMap="BaseMap">
+        SELECT *FROM  tb_good where id=#{id}
+    </select>
+
+    <update id="updateBy">
+        update tb_good
+        <set>
+            <if test="name != null">
+                sh_name = #{name},
+            </if>
+            <if test="price != null">
+                sh_price = #{price},
+            </if>
+            <if test="content != null">
+                sh_content = #{content},
+            </if>
+            <if test="image != null">
+                sh_image = #{image},
+            </if>
+            <if test="imageReName != null">
+                sh_image_name = #{imageReName},
+            </if>
+            <if test="goodType != null and goodType.id !=null">
+                id = #{goodType.id},
+            </if>
+        </set>
+        where sh_id = #{id}
+    </update>
+</mapper>

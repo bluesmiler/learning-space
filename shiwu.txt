@@ -1,0 +1,41 @@
+List<Integer> goodsIdList = shoppingCart.getGoodsIdList();
+      Account account = accountMapper.selectById(shoppingCart.getAccountId());
+      Double accountMoney = account.getBalance();
+      Double needMoney = 0.00;
+      List<Goods> goods = new ArrayList<>();
+      
+      for(int i=0;i<goodsIdList.size();i++){
+        Goods good = goodsMapper.selectById(goodsIdList.get(i));
+        if(good.getStock()>0){
+          good.setStock(good.getStock()-1);
+          goodsMapper.update(good);
+          needMoney+=good.getPrice();
+          goods.add(good);
+        }else{
+          throw new IllegalStockException();
+        }
+      }
+      
+      if(accountMoney<needMoney){
+        throw new IllegalBalanceException();
+      }else{
+        account.setBalance(accountMoney-needMoney);
+        accountMapper.update(account);
+        
+        for(Goods good:goods){
+          // good.setStock(good.getSales()-1);
+          good.setSales(good.getSales()+1);
+          goodsMapper.update(good);
+        }
+        
+      }
+      return true;
+
+
+try {
+            goodsService.checkOut(shoppingCart);
+        } catch (IllegalStockException | IllegalBalanceException e) {
+            return new Result<>().setCode(400).setMessage(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.comm.dao.CongPictureMapper">
+  <resultMap id="ImageMap" type="com.pm.entity.CongPictuer">
+    <id column="cong_picture_id" property="congPictureId"></id>
+    <result column="cong_picture_name" property="congPictureName"></result>
+    <result column="cong_picture_attribute" property="congPictureAttribute"></result>
+    <result column="congress_hall_id" property="congressHallId"></result>
+
+
+  </resultMap>
+
+  <insert id="insert"  parameterType="com.pm.entity.CongPictuer">
+    INSERT INTO tb_congpicture(cong_picture_name,cong_picture_attribute,congress_hall_id)
+    VALUES
+    (#{congPictureName},#{congPictureAttribute},#{congressHallId})
+  </insert>
+
+
+</mapper>

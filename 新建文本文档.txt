@@ -1,0 +1,56 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>B/S体系之登录</title>
+    <link rel="stylesheet" type="text/css" href="css/login.css">
+    <script src="js/login.js"></script>
+</head>
+<body>
+<div class="login-container">
+    <div class="login-title">Login</div>
+    <input type="text" placeholder="username" class="to-focus">
+    <input type="password" placeholder="password" class="to-focus">
+    <input type="button" class="to-hover" onclick="toLogin()" value="login">
+</div>
+</body>
+</html>
+```
+
+```css
+html,body{
+    margin: 0;
+    padding: 0;
+    letter-spacing: 1px;
+}
+.login-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 240px;
+}
+.login-title{
+    font-size: 24px;
+    color: #6b6b14;
+}
+input{
+    border-style: none;
+    outline: none;
+    border-bottom: #d0d09e 1px solid;
+    width: 400px;
+    height: 30px;
+    margin: 16px;
+}
+.to-focus:focus{
+    background: #ececc2;
+    transition: background-color 1s;
+}
+.to-hover:hover{
+    cursor: pointer;
+    background-color: #b2afaf;
+    transition: background-color 1s;
+}
+```
+

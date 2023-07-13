@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.property.dao.RepairsMapper">
+  <resultMap id="BaseResultMap" type="com.pm.entity.Repairs">
+    <id column="rep_id" jdbcType="INTEGER" property="repId" />
+    <result column="rep_man" jdbcType="VARCHAR" property="repMan" />
+    <result column="rep_createtime" jdbcType="TIMESTAMP" property="repCreatetime" />
+    <result column="rep_time" jdbcType="TIMESTAMP" property="repTime" />
+    <result column="rep_finish_time" jdbcType="TIMESTAMP" property="repFinishTime" />
+    <result column="handle_situation" jdbcType="INTEGER" property="handleSituation" />
+    <association property="user" column="user_id" javaType="com.pm.entity.User" fetchType="lazy" select="com.pm.personal.dao.UserDao.findUserById"></association>
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.pm.entity.Repairs">
+    <result column="rep_content" jdbcType="LONGVARCHAR" property="repContent" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    rep_id, user_id, rep_man, rep_createtime, rep_time, rep_finish_time, handle_situation
+  </sql>
+  <sql id="Blob_Column_List">
+    rep_content
+  </sql>
+  <select id="findCount" resultType="java.lang.Integer">
+    SELECT COUNT(rep_id) FROM tb_repairs
+  </select>
+  <select id="findAll" resultMap="ResultMapWithBLOBs">
+    SELECT
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_repairs limit #{arg0},#{arg1}
+  </select>
+
+  <delete id="deleteBatch" parameterType="java.lang.Integer">
+    delete from tb_repairs where rep_id in
+    <foreach item="rep_id" collection="array" open="(" separator="," close=")">
+      #{rep_id}
+    </foreach>
+  </delete>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_repairs
+    where rep_id = #{repId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_repairs
+    where rep_id = #{repId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pm.entity.Repairs" useGeneratedKeys="true" keyProperty="repId">
+    insert into tb_repairs (rep_id, user_id, rep_man, 
+      rep_createtime, rep_time, rep_finish_time, 
+      handle_situation, rep_content)
+    values (#{repId,jdbcType=INTEGER}, #{user.userId,jdbcType=INTEGER}, #{repMan,jdbcType=VARCHAR},
+      #{repCreatetime,jdbcType=TIMESTAMP}, #{repTime,jdbcType=TIMESTAMP}, #{repFinishTime,jdbcType=TIMESTAMP}, 
+      #{handleSituation,jdbcType=INTEGER}, #{repContent,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pm.entity.Repairs" useGeneratedKeys="true" keyProperty="repId">
+    insert into tb_repairs
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="repId != null">
+        rep_id,
+      </if>
+      <if test="user!=null and user.userId != null">
+        user_id,
+      </if>
+      <if test="repMan != null">
+        rep_man,
+      </if>
+      <if test="repCreatetime != null">
+        rep_createtime,
+      </if>
+      <if test="repTime != null">
+        rep_time,
+      </if>
+      <if test="repFinishTime != null">
+        rep_finish_time,
+      </if>
+      <if test="handleSituation != null">
+        handle_situation,
+      </if>
+      <if test="repContent != null">
+        rep_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="repId != null">
+        #{repId,jdbcType=INTEGER},
+      </if>
+      <if test="user!=null and user.userId != null">
+        #{user.userId,jdbcType=INTEGER},
+      </if>
+      <if test="repMan != null">
+        #{repMan,jdbcType=VARCHAR},
+      </if>
+      <if test="repCreatetime != null">
+        #{repCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="repTime != null">
+        #{repTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="repFinishTime != null">
+        #{repFinishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handleSituation != null">
+        #{handleSituation,jdbcType=INTEGER},
+      </if>
+      <if test="repContent != null">
+        #{repContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pm.entity.Repairs">
+    update tb_repairs
+    <set>
+      <if test="user!=null and user.userId != null">
+        user_id = #{user.userId,jdbcType=INTEGER},
+      </if>
+      <if test="repMan != null">
+        rep_man = #{repMan,jdbcType=VARCHAR},
+      </if>
+      <if test="repCreatetime != null">
+        rep_createtime = #{repCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="repTime != null">
+        rep_time = #{repTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="repFinishTime != null">
+        rep_finish_time = #{repFinishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handleSituation != null">
+        handle_situation = #{handleSituation,jdbcType=INTEGER},
+      </if>
+      <if test="repContent != null">
+        rep_content = #{repContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where rep_id = #{repId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pm.entity.Repairs">
+    update tb_repairs
+    set user_id = #{user.userId,jdbcType=INTEGER},
+      rep_man = #{repMan,jdbcType=VARCHAR},
+      rep_createtime = #{repCreatetime,jdbcType=TIMESTAMP},
+      rep_time = #{repTime,jdbcType=TIMESTAMP},
+      rep_finish_time = #{repFinishTime,jdbcType=TIMESTAMP},
+      handle_situation = #{handleSituation,jdbcType=INTEGER},
+      rep_content = #{repContent,jdbcType=LONGVARCHAR}
+    where rep_id = #{repId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pm.entity.Repairs">
+    update tb_repairs
+    set user_id = #{user.userId,jdbcType=INTEGER},
+      rep_man = #{repMan,jdbcType=VARCHAR},
+      rep_createtime = #{repCreatetime,jdbcType=TIMESTAMP},
+      rep_time = #{repTime,jdbcType=TIMESTAMP},
+      rep_finish_time = #{repFinishTime,jdbcType=TIMESTAMP},
+      handle_situation = #{handleSituation,jdbcType=INTEGER}
+    where rep_id = #{repId,jdbcType=INTEGER}
+  </update>
+</mapper>

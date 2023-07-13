@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.property.dao.ComplainMapper">
+  <resultMap id="BaseResultMap" type="com.pm.entity.Complain">
+    <id column="complain_id" jdbcType="INTEGER" property="complainId" />
+    <result column="complain_time" jdbcType="TIMESTAMP" property="complainTime" />
+    <result column="fdb_time" jdbcType="TIMESTAMP" property="fdbTime" />
+    <result column="fdb_situation" jdbcType="INTEGER" property="fdbSituation" />
+    <result column="handleman" jdbcType="VARCHAR" property="handleman" />
+    <association property="user"
+                 column="user_id"
+                 javaType="com.pm.entity.User"
+                 fetchType="lazy"
+                 select="com.pm.personal.dao.UserDao.findUserById">
+    </association>
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.pm.entity.ComplainWithBLOBs">
+    <result column="complain_content" jdbcType="LONGVARCHAR" property="complainContent" />
+    <result column="complain_fdb" jdbcType="LONGVARCHAR" property="complainFdb" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    complain_id, user_id, complain_time, fdb_time, fdb_situation, handleman
+  </sql>
+  <sql id="Blob_Column_List">
+    complain_content, complain_fdb
+  </sql>
+  <select id="findCount" resultType="java.lang.Integer">
+    SELECT COUNT(complain_id) FROM tb_complain
+  </select>
+  <select id="findAll" resultMap="ResultMapWithBLOBs">
+    SELECT
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_complain
+  </select>
+
+  <delete id="deleteBatch" parameterType="java.lang.Integer">
+    delete from tb_complain where complain_id in
+    <foreach item="complain_id" collection="array" open="(" separator="," close=")">
+      #{complain_id}
+    </foreach>
+  </delete>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_complain
+    where complain_id = #{complainId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_complain
+    where complain_id = #{complainId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pm.entity.ComplainWithBLOBs" useGeneratedKeys="true" keyProperty="complainId">
+    insert into tb_complain (complain_id, user_id, complain_time, 
+      fdb_time, fdb_situation, handleman, 
+      complain_content, complain_fdb)
+    values (#{complainId,jdbcType=INTEGER}, #{user.userId,jdbcType=INTEGER}, #{complainTime,jdbcType=TIMESTAMP},
+      #{fdbTime,jdbcType=TIMESTAMP}, #{fdbSituation,jdbcType=INTEGER}, #{handleman,jdbcType=VARCHAR}, 
+      #{complainContent,jdbcType=LONGVARCHAR}, #{complainFdb,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pm.entity.ComplainWithBLOBs" useGeneratedKeys="true" keyProperty="complainId">
+    insert into tb_complain
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="complainId != null">
+        complain_id,
+      </if>
+      <if test="user!=null and user.userId != null">
+        user_id,
+      </if>
+      <if test="complainTime != null">
+        complain_time,
+      </if>
+      <if test="fdbTime != null">
+        fdb_time,
+      </if>
+      <if test="fdbSituation != null">
+        fdb_situation,
+      </if>
+      <if test="handleman != null">
+        handleman,
+      </if>
+      <if test="complainContent != null">
+        complain_content,
+      </if>
+      <if test="complainFdb != null">
+        complain_fdb,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="complainId != null">
+        #{complainId,jdbcType=INTEGER},
+      </if>
+      <if test="user!=null and user.userId != null">
+        #{user.userId,jdbcType=INTEGER},
+      </if>
+      <if test="complainTime != null">
+        #{complainTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fdbTime != null">
+        #{fdbTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fdbSituation != null">
+        #{fdbSituation,jdbcType=INTEGER},
+      </if>
+      <if test="handleman != null">
+        #{handleman,jdbcType=VARCHAR},
+      </if>
+      <if test="complainContent != null">
+        #{complainContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="complainFdb != null">
+        #{complainFdb,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pm.entity.ComplainWithBLOBs">
+    update tb_complain
+    <set>
+      <if test="user!=null and user.userId != null">
+        user_id = #{user.userId,jdbcType=INTEGER},
+      </if>
+      <if test="complainTime != null">
+        complain_time = #{complainTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fdbTime != null">
+        fdb_time = #{fdbTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fdbSituation != null">
+        fdb_situation = #{fdbSituation,jdbcType=INTEGER},
+      </if>
+      <if test="handleman != null">
+        handleman = #{handleman,jdbcType=VARCHAR},
+      </if>
+      <if test="complainContent != null">
+        complain_content = #{complainContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="complainFdb != null">
+        complain_fdb = #{complainFdb,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where complain_id = #{complainId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pm.entity.ComplainWithBLOBs">
+    update tb_complain
+    set user_id = #{user.userId,jdbcType=INTEGER},
+      complain_time = #{complainTime,jdbcType=TIMESTAMP},
+      fdb_time = #{fdbTime,jdbcType=TIMESTAMP},
+      fdb_situation = #{fdbSituation,jdbcType=INTEGER},
+      handleman = #{handleman,jdbcType=VARCHAR},
+      complain_content = #{complainContent,jdbcType=LONGVARCHAR},
+      complain_fdb = #{complainFdb,jdbcType=LONGVARCHAR}
+    where complain_id = #{complainId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pm.entity.Complain">
+    update tb_complain
+    set user_id = #{user.userId,jdbcType=INTEGER},
+      complain_time = #{complainTime,jdbcType=TIMESTAMP},
+      fdb_time = #{fdbTime,jdbcType=TIMESTAMP},
+      fdb_situation = #{fdbSituation,jdbcType=INTEGER},
+      handleman = #{handleman,jdbcType=VARCHAR}
+    where complain_id = #{complainId,jdbcType=INTEGER}
+  </update>
+</mapper>

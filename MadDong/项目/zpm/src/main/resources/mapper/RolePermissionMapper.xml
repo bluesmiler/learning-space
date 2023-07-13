@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.personal.dao.RolePermissionDao">
+    <resultMap id="rpMap" type="rolePermission">
+        <id property="id" column="id" />
+        <result property="roleId" column="role_id"/>
+        <result property="perId" column="per_id"/>
+    </resultMap>
+
+    <insert id="saveBatchRP" parameterType="list">
+        INSERT INTO role_permission(role_id,per_id) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.roleId},#{item.perId})
+        </foreach>
+
+    </insert>
+
+    <delete id="deleteByRoleId">
+        DELETE FROM role_permission WHERE role_id =#{roleId}
+    </delete>
+        
+    <delete id="deleteBatch">
+        DELETE FROM role_permission WHERE role_Id= #{roleId} AND per_id IN
+            <foreach collection="array" item="perId" open="(" close=")" separator=",">
+                #{perId}
+            </foreach>
+    </delete>
+    <insert id="saveBatch" parameterType="list">
+        INSERT INTO role_permission(role_id,per_id) VALUES
+        <foreach collection="array" item="item"  separator=",">
+            (#{roleId}, #{item})
+        </foreach>
+
+    </insert>
+
+</mapper>

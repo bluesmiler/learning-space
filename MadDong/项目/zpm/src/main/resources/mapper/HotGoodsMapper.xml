@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.store.dao.HotGoodsDao">
+ <resultMap id="BaseMap" type="com.pm.entity.HotGoods">
+     <id column="hot_good_id" property="id"></id>
+     <result column="hot_good_name" property="name"></result>
+     <result column="hot_good_price" property="price"></result>
+     <result column="hot_good_content" property="content"></result>
+     <result column="hot_good_image" property="image"></result>
+     <result column="hot_good_image_name" property="imageReName"></result>
+     <association property="goodType"  column="id" javaType="com.pm.entity.GoodType"
+         select="com.pm.store.dao.GoodTypeDao.findById">
+     </association>
+  </resultMap>
+  
+  <insert id="save">
+    INSERT INTO tb_hot_good(hot_good_name,hot_good_price,hot_good_content,hot_good_image,hot_good_image_name,id)
+    VALUES
+      (#{name}, #{price}, #{content},#{image},#{imageReName},#{goodType.id})
+  </insert>
+  
+  <select id="findAll" resultMap="BaseMap">
+        SELECT *FROM  tb_hot_good
+  </select>
+  
+  <delete id="delete">
+    DELETE FROM tb_hot_good WHERE hot_good_id=#{id}
+  </delete>
+
+    <select id="findById" resultMap="BaseMap">
+        SELECT *FROM  tb_hot_good where hot_good_id=#{id}
+    </select>
+    
+</mapper>

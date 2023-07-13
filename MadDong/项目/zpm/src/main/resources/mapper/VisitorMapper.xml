@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.personal.dao.VisitorDao">
+
+    <resultMap id="visitorMap" type="visitor" >
+       <id property="visitorId" column="visitor_id" />
+        <result property="userId" column="user_id"/>
+        <result property="visitorName" column="visitor_name"/>
+        <result property="visitorSex" column="visitor_sex"/>
+        <result property="codeName" column="code_name"/>
+        <result property="commId" column="comm_id"/>
+        <result property="createTime" column="code_createtime" />
+    </resultMap>
+
+    <select id="findVisitorByUserId" resultMap="visitorMap">
+        SELECT visitor_id,
+               user_id,
+               visitor_name,
+               visitor_sex,
+               code_name,
+               comm_id,
+               code_createtime
+        FROM  tb_visitor
+        WHERE user_id = #{userId}
+    </select>
+
+    <delete id="deleteVisitorByUserId">
+
+        DELETE FROM tb_visitor
+        WHERE user_id = #{userId}
+    </delete>
+
+    <insert id="saveVisitor" parameterType="visitor">
+        INSERT INTO tb_visitor(
+            user_id,
+            visitor_name,
+            visitor_sex,
+            code_name,
+            comm_id,
+            code_createtime)
+        VALUES (
+            #{userId},#{visitorName},#{visitorSex},#{codeName},#{commId},#{createTime})
+
+    </insert>
+
+    <delete id="deleteVisitorByVisitorId">
+
+        DELETE FROM tb_visitor
+        WHERE visitor_id = #{visitorId}
+    </delete>
+
+
+
+
+
+
+
+
+
+</mapper>

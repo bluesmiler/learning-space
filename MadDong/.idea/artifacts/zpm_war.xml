@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="zpm:war">
+    <output-path>$PROJECT_DIR$/项目/zpm/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>zpm</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="zpm.war">
+      <element id="artifact" artifact-name="zpm:war exploded" />
+    </root>
+  </artifact>
+</component>

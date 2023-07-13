@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.store.dao.GoodTypeDao">
+    <resultMap id="BaseMap" type="com.pm.entity.GoodType">
+        <id column="id" property="id"></id>
+        <result column="typeName" property="name"></result>
+    </resultMap>
+
+    <select id="findAll" resultMap="BaseMap">
+        SELECT *FROM  tb_good_type
+    </select>
+
+
+    <select id="findById" resultMap="BaseMap">
+        SELECT *FROM  tb_good_type where id=#{id}
+    </select>
+
+</mapper>

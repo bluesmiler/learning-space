@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.personal.dao.RoleDao">
+ 	<resultMap id="roleMap" type="com.pm.entity.Role" >
+        <id property="roleId" column="role_id"></id>
+        <result property="roleName" column="role_name"></result>
+        <collection property="perList"
+                    column="role_id"
+                    ofType="permission"
+                    select="com.pm.personal.dao.PermissionDao.findAllByRoleId">
+
+        </collection>
+    </resultMap>
+    
+    
+    <delete id="deleteById">
+        delete from tb_role where role_id =#{roleId}
+    </delete>
+    
+    <select id="findAll" resultMap="roleMap" >
+        SELECT * FROM tb_role
+    </select>
+    
+    <insert id="saveRole" useGeneratedKeys="true" keyProperty="roleId" keyColumn="role_id">
+        insert into tb_role(role_name) values(#{roleName})
+    </insert>
+
+    <select id="findById" resultMap="roleMap">
+        SELECT role_id,role_name FROM tb_role WHERE role_id=#{roleId}
+    </select>
+
+    <select id="findRoleByName" resultMap="roleMap">
+        SELECT role_id,role_name FROM tb_role WHERE role_name=#{roleName}
+    </select>
+
+
+    <update id="updateByRole">
+        UPDATE tb_role SET role_name =#{roleName} WHERE role_id=#{roleId}
+    </update>
+
+</mapper>

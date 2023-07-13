@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.property.dao.ActivityParticipantsMapper">
+  <resultMap id="BaseResultMap" type="com.pm.entity.ActivityParticipants">
+    <id column="pp_id" jdbcType="INTEGER" property="ppId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="act_id" jdbcType="INTEGER" property="actId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    pp_id, user_id, act_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_activity_participants
+    where pp_id = #{ppId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_activity_participants
+    where pp_id = #{ppId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pm.entity.ActivityParticipants">
+    insert into tb_activity_participants (pp_id, user_id, act_id
+      )
+    values (#{ppId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{actId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pm.entity.ActivityParticipants">
+    insert into tb_activity_participants
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ppId != null">
+        pp_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="actId != null">
+        act_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ppId != null">
+        #{ppId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="actId != null">
+        #{actId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pm.entity.ActivityParticipants">
+    update tb_activity_participants
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="actId != null">
+        act_id = #{actId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where pp_id = #{ppId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pm.entity.ActivityParticipants">
+    update tb_activity_participants
+    set user_id = #{userId,jdbcType=INTEGER},
+      act_id = #{actId,jdbcType=INTEGER}
+    where pp_id = #{ppId,jdbcType=INTEGER}
+  </update>
+</mapper>

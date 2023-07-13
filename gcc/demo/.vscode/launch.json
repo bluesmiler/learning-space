@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "cwd": "c:/Users/29793/Learningspace/gcc/demo",
+      "program": "c:/Users/29793/Learningspace/gcc/demo/build/Debug/outDebug",
+      "MIMode": "gbk",
+      "miDebuggerPath": "gbk",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gbk",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+    }
+  ]
+}

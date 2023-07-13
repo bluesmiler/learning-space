@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.comm.dao.CongressHallMapper">
+  <resultMap id="congMap" type="com.pm.entity.CongressHall">
+    <id column="congress_hall_id" property="congressHallId"></id>
+    <result column="congress_hall_headline" property="congressHallHeadline"></result>
+    <result column="congress_hall_time" property="congressHallTime"></result>
+    <result column="congress_hall_content" property="congressHallContent"></result>
+    <association fetchType="lazy" column="user_id" property="user" javaType="com.pm.entity.User" select="com.pm.personal.dao.UserDao.findUserById" >
+    </association>
+    <collection fetchType="lazy" column="congress_hall_id" property="congPictuers" ofType="com.pm.entity.CongPictuer"  select="findByCongImg" >
+    </collection>
+
+  </resultMap>
+  <!--分页显示所有-->
+  <select id="findByAll" resultMap="congMap" resultType="com.pm.entity.CongressHall">
+    SELECT * FROM tb_congress_hall
+  </select>
+
+  <select id="findByUsertId"  resultMap="congMap">
+    select * from tb_congress_hall WHERE user_id=#{user.userId};
+  </select>
+
+  <delete id="delete">
+    DELETE FROM tb_congress_hall WHERE congress_hall_id=#{congressHallId}
+  </delete>
+
+  <select id="findById" resultMap="congMap" resultType="com.pm.entity.CongressHall">
+    SELECT * FROM tb_congress_hall WHERE congress_hall_id=#{congressHallId}
+  </select>
+
+  <insert id="insert"  parameterType="com.pm.entity.CongressHall" useGeneratedKeys="true" keyProperty="congressHallId">
+        INSERT INTO tb_congress_hall(congress_hall_headline,congress_hall_content,user_id,congress_hall_time)
+    VALUES(#{congressHallHeadline},#{congressHallContent},#{user.userId},#{congressHallTime})
+  </insert>
+
+  <resultMap id="ImageMap" type="com.pm.entity.CongPictuer">
+    <id column="cong_picture_id" property="congPictureId"></id>
+    <result column="cong_picture_name" property="congPictureName"></result>
+    <result column="cong_picture_attribute" property="congPictureAttribute"></result>
+    <result column="congress_hall_id" property="congressHallId"></result>
+  </resultMap>
+
+  <resultMap id="UserMap" type="com.pm.entity.User">
+    <id column="user_id" property="userId"></id>
+    <result column="user_truename" property="truename"></result>
+    <result column="user_password" property="password"></result>
+    <result column="user_nickname" property="nickname"></result>
+    <result column="user_phone" property="phone"></result>
+    <result column="user_email" property="email"></result>
+    <result column="user_sex" property="sex"></result>
+  </resultMap>
+
+  <select id="findByUserId" resultMap="UserMap"  resultType="com.pm.entity.User">
+    SELECT user_id,user_truename,user_password,user_nickname,user_phone,user_email,user_sex FROM tb_user WHERE user_id=#{userId}
+  </select>
+
+  <select id="findByCongImg" resultMap="ImageMap"  resultType="com.pm.entity.CongPictuer">
+    SELECT cong_picture_id,cong_picture_name,cong_picture_attribute,congress_hall_id FROM tb_congpicture WHERE congress_hall_id=#{congressHallId}
+  </select>
+
+
+
+
+</mapper>

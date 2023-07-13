@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.store.dao.ShoppingCartDao">
+    <resultMap id="BaseMap" type="com.pm.entity.ShoppingCart">
+        <id column="ca_id" property="id"></id>
+        <result column="ca_name" property="name"></result>
+        <result column="ca_image" property="image"></result>
+        <result column="ca_time" property="time"></result>
+        <result column="ca_count" property="count"></result>
+        <result column="user_id" property="userId"></result>
+        <result column="ca_ordername" property="orderName"></result>
+        <result column="ca_price" property="price"></result>
+    </resultMap>
+
+    <insert id="save">
+        INSERT INTO tb_shoppingcart(ca_name,ca_image,ca_time,ca_count,user_id,ca_ordername,ca_price)
+        VALUES
+        (#{name}, #{image}, #{time},#{count},#{userId},#{orderName},#{price})
+    </insert>
+
+    <select id="findAll" resultMap="BaseMap" resultType="com.pm.entity.ShoppingCart">
+        select * from tb_shoppingcart where user_id=#{userId}
+    </select>
+
+
+    <delete id="delete">
+        DELETE FROM tb_shoppingcart WHERE ca_id=#{id}
+    </delete>
+
+</mapper>

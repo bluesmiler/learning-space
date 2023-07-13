@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.property.dao.PictureMapper">
+  <resultMap id="BaseResultMap" type="com.pm.entity.Picture">
+    <id column="picture_id" jdbcType="INTEGER" property="pictureId" />
+    <result column="picture_img" jdbcType="VARCHAR" property="pictureImg" />
+    <result column="picture_name" jdbcType="VARCHAR" property="pictureName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    picture_id, picture_img, picture_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_picture
+    where picture_id = #{pictureId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_picture
+    where picture_id = #{pictureId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pm.entity.Picture" useGeneratedKeys="true" keyProperty="pictureId">
+    insert into tb_picture (picture_id, picture_img, picture_name
+      )
+    values (#{pictureId,jdbcType=INTEGER}, #{pictureImg,jdbcType=VARCHAR}, #{pictureName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pm.entity.Picture" useGeneratedKeys="true" keyProperty="pictureId">
+    insert into tb_picture
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pictureId != null">
+        picture_id,
+      </if>
+      <if test="pictureImg != null">
+        picture_img,
+      </if>
+      <if test="pictureName != null">
+        picture_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pictureId != null">
+        #{pictureId,jdbcType=INTEGER},
+      </if>
+      <if test="pictureImg != null">
+        #{pictureImg,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureName != null">
+        #{pictureName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pm.entity.Picture">
+    update tb_picture
+    <set>
+      <if test="pictureImg != null">
+        picture_img = #{pictureImg,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureName != null">
+        picture_name = #{pictureName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where picture_id = #{pictureId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pm.entity.Picture">
+    update tb_picture
+    set picture_img = #{pictureImg,jdbcType=VARCHAR},
+      picture_name = #{pictureName,jdbcType=VARCHAR}
+    where picture_id = #{pictureId,jdbcType=INTEGER}
+  </update>
+</mapper>

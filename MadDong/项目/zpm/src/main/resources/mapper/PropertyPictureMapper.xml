@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.property.dao.PropertyPictureMapper">
+  <resultMap id="BaseResultMap" type="com.pm.entity.vo.PropertyPicture">
+    <id column="pp_id" jdbcType="INTEGER" property="ppId" />
+    <result column="rep_id" jdbcType="INTEGER" property="repId" />
+    <result column="complain_id" jdbcType="INTEGER" property="complainId" />
+    <result column="water_id" jdbcType="INTEGER" property="waterId" />
+    <result column="fbk_id" jdbcType="INTEGER" property="fbkId" />
+    <association property="picture" column="picture_id" fetchType="eager" javaType="com.pm.entity.Picture"
+    select="com.pm.property.dao.PictureMapper.selectByPrimaryKey"></association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    pp_id, rep_id, picture_id, complain_id, water_id, fbk_id
+  </sql>
+
+  <select id="findByComplainId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_property_picture
+    where complain_id = #{complainId,jdbcType=INTEGER}
+  </select>
+  <select id="findByRepId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_property_picture
+    where rep_id = #{repId,jdbcType=INTEGER}
+  </select>
+  <select id="findByWaterId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_property_picture
+    where water_id = #{waterId,jdbcType=INTEGER}
+  </select>
+  <select id="findByFbkId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_property_picture
+    where fbk_id = #{fbkId,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_property_picture
+    where pp_id = #{ppId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_property_picture
+    where pp_id = #{ppId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pm.entity.vo.PropertyPicture" useGeneratedKeys="true" keyProperty="ppId">
+    insert into tb_property_picture (pp_id, rep_id, picture_id, 
+      complain_id, water_id, fbk_id
+      )
+    values (#{ppId,jdbcType=INTEGER}, #{repId,jdbcType=INTEGER}, #{picture.pictureId,jdbcType=INTEGER},
+      #{complainId,jdbcType=INTEGER}, #{waterId,jdbcType=INTEGER}, #{fbkId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pm.entity.vo.PropertyPicture" useGeneratedKeys="true" keyProperty="ppId">
+    insert into tb_property_picture
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ppId != null">
+        pp_id,
+      </if>
+      <if test="repId != null">
+        rep_id,
+      </if>
+      <if test="picture != null and picture.pictureId != null">
+        picture_id,
+      </if>
+      <if test="complainId != null">
+        complain_id,
+      </if>
+      <if test="waterId != null">
+        water_id,
+      </if>
+      <if test="fbkId != null">
+        fbk_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ppId != null">
+        #{ppId,jdbcType=INTEGER},
+      </if>
+      <if test="repId != null">
+        #{repId,jdbcType=INTEGER},
+      </if>
+      <if test="picture != null and picture.pictureId != null">
+        #{picture.pictureId,jdbcType=INTEGER},
+      </if>
+      <if test="complainId != null">
+        #{complainId,jdbcType=INTEGER},
+      </if>
+      <if test="waterId != null">
+        #{waterId,jdbcType=INTEGER},
+      </if>
+      <if test="fbkId != null">
+        #{fbkId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pm.entity.vo.PropertyPicture">
+    update tb_property_picture
+    <set>
+      <if test="repId != null">
+        rep_id = #{repId,jdbcType=INTEGER},
+      </if>
+      <if test="picture != null and picture.pictureId != null">
+        picture_id = #{picture.pictureId,jdbcType=INTEGER},
+      </if>
+      <if test="complainId != null">
+        complain_id = #{complainId,jdbcType=INTEGER},
+      </if>
+      <if test="waterId != null">
+        water_id = #{waterId,jdbcType=INTEGER},
+      </if>
+      <if test="fbkId != null">
+        fbk_id = #{fbkId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where pp_id = #{ppId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pm.entity.vo.PropertyPicture">
+    update tb_property_picture
+    set rep_id = #{repId,jdbcType=INTEGER},
+      picture_id = #{picture.pictureId,jdbcType=INTEGER},
+      complain_id = #{complainId,jdbcType=INTEGER},
+      water_id = #{waterId,jdbcType=INTEGER},
+      fbk_id = #{fbkId,jdbcType=INTEGER}
+    where pp_id = #{ppId,jdbcType=INTEGER}
+  </update>
+</mapper>

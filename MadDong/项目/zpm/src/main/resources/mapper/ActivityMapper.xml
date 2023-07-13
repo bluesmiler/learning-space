@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.property.dao.ActivityMapper">
+  <resultMap id="BaseResultMap" type="com.pm.entity.Activity">
+    <id column="act_id" jdbcType="INTEGER" property="actId" />
+    <result column="act_theme" jdbcType="VARCHAR" property="actTheme" />
+    <result column="comm_id" jdbcType="INTEGER" property="commId" />
+    <result column="s_time" jdbcType="TIMESTAMP" property="sTime" />
+    <result column="f_time" jdbcType="TIMESTAMP" property="fTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.pm.entity.Activity">
+    <result column="act_content" jdbcType="LONGVARCHAR" property="actContent" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    act_id, act_theme, comm_id, s_time, f_time
+  </sql>
+  <sql id="Blob_Column_List">
+    act_content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_activity
+    where act_id = #{actId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_activity
+    where act_id = #{actId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pm.entity.Activity">
+    insert into tb_activity (act_id, act_theme, comm_id, 
+      s_time, f_time, act_content
+      )
+    values (#{actId,jdbcType=INTEGER}, #{actTheme,jdbcType=VARCHAR}, #{commId,jdbcType=INTEGER}, 
+      #{sTime,jdbcType=TIMESTAMP}, #{fTime,jdbcType=TIMESTAMP}, #{actContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pm.entity.Activity">
+    insert into tb_activity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="actId != null">
+        act_id,
+      </if>
+      <if test="actTheme != null">
+        act_theme,
+      </if>
+      <if test="commId != null">
+        comm_id,
+      </if>
+      <if test="sTime != null">
+        s_time,
+      </if>
+      <if test="fTime != null">
+        f_time,
+      </if>
+      <if test="actContent != null">
+        act_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="actId != null">
+        #{actId,jdbcType=INTEGER},
+      </if>
+      <if test="actTheme != null">
+        #{actTheme,jdbcType=VARCHAR},
+      </if>
+      <if test="commId != null">
+        #{commId,jdbcType=INTEGER},
+      </if>
+      <if test="sTime != null">
+        #{sTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fTime != null">
+        #{fTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="actContent != null">
+        #{actContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pm.entity.Activity">
+    update tb_activity
+    <set>
+      <if test="actTheme != null">
+        act_theme = #{actTheme,jdbcType=VARCHAR},
+      </if>
+      <if test="commId != null">
+        comm_id = #{commId,jdbcType=INTEGER},
+      </if>
+      <if test="sTime != null">
+        s_time = #{sTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fTime != null">
+        f_time = #{fTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="actContent != null">
+        act_content = #{actContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where act_id = #{actId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pm.entity.Activity">
+    update tb_activity
+    set act_theme = #{actTheme,jdbcType=VARCHAR},
+      comm_id = #{commId,jdbcType=INTEGER},
+      s_time = #{sTime,jdbcType=TIMESTAMP},
+      f_time = #{fTime,jdbcType=TIMESTAMP},
+      act_content = #{actContent,jdbcType=LONGVARCHAR}
+    where act_id = #{actId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pm.entity.Activity">
+    update tb_activity
+    set act_theme = #{actTheme,jdbcType=VARCHAR},
+      comm_id = #{commId,jdbcType=INTEGER},
+      s_time = #{sTime,jdbcType=TIMESTAMP},
+      f_time = #{fTime,jdbcType=TIMESTAMP}
+    where act_id = #{actId,jdbcType=INTEGER}
+  </update>
+</mapper>

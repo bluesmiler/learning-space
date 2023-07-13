@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.comm.dao.HelpMapper">
+  <resultMap id="helpMap" type="com.pm.entity.Help">
+    <id column="help_id" property="helpId"></id>
+    <result column="help_headline" property="helpHeadline"></result>
+    <result column="help_content" property="helpContent"></result>
+    <result column="help_time" property="helpTime"></result>
+    <association fetchType="lazy" column="user_id" property="user" javaType="com.pm.entity.User" select="com.pm.personal.dao.UserDao.findUserById" >
+    </association>
+    <collection fetchType="lazy" column="help_id" property="helpPictures" ofType="com.pm.entity.HelpPicture"  select="findByHelpImg" >
+    </collection>
+
+  </resultMap>
+
+  <select id="findByAll" resultMap="helpMap" resultType="com.pm.entity.Help">
+    SELECT help_id,help_headline,help_content,help_time,user_id FROM tb_help
+  </select>
+
+  <select id="findById" resultMap="helpMap" resultType="com.pm.entity.Help">
+    SELECT help_id,help_headline,help_content,help_time,user_id FROM tb_help WHERE help_id=#{helpId}
+  </select>
+
+  <insert id="insert" parameterType="com.pm.entity.Help" useGeneratedKeys="true" keyProperty="helpId">
+    INSERT INTO tb_help(help_headline,help_content,user_id,help_time)
+    VALUES(#{helpHeadline},#{helpContent},#{user.userId},#{helpTime})
+  </insert>
+
+  <resultMap id="ImageMap" type="com.pm.entity.HelpPicture">
+    <id column="help_picture_id" property="helpPictureId"></id>
+    <result column="help_picture_name" property="helpPictureName"></result>
+    <result column="help_picture_attribute" property="helpPictureAttribute"></result>
+    <result column="help_id" property="helpId"></result>
+  </resultMap>
+
+  <resultMap id="UserMap" type="com.pm.entity.User">
+    <id column="user_id" property="userId"></id>
+    <result column="user_truename" property="truename"></result>
+    <result column="user_password" property="password"></result>
+    <result column="user_nickname" property="nickname"></result>
+    <result column="user_phone" property="phone"></result>
+    <result column="user_email" property="email"></result>
+    <result column="user_sex" property="sex"></result>
+  </resultMap>
+
+  <select id="findByHelpImg" resultMap="ImageMap"  resultType="com.pm.entity.HelpPicture">
+   SELECT help_picture_id,help_picture_name,help_picture_attribute,help_id FROM tb_helppicture WHERE help_id=#{helpId}
+  </select>
+
+</mapper>

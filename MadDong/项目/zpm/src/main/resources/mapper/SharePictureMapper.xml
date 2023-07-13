@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.comm.dao.SharePictureMapper">
+    <resultMap id="ImageMap" type="com.pm.entity.SharePicture">
+        <id column="share_picture_id" property="sharePictureId"></id>
+        <result column="share_picture_name" property="sharePictureName"></result>
+        <result column="share_picture_attribute" property="sharePictureAttribute"></result>
+        <result column="share_id" property="shareId"></result>
+
+    </resultMap>
+
+    <insert id="insert"  parameterType="com.pm.entity.SharePicture">
+        INSERT INTO tb_sharepicture(share_picture_name,share_picture_attribute,share_id)
+        VALUES
+        (#{sharePictureName},#{sharePictureAttribute},#{shareId})
+    </insert>
+
+
+</mapper>

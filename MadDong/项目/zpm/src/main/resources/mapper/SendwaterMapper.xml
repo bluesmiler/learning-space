@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.property.dao.SendwaterMapper">
+  <resultMap id="BaseResultMap" type="com.pm.entity.Sendwater">
+    <id column="water_id" jdbcType="INTEGER" property="waterId" />
+    <result column="order_time" jdbcType="DATE" property="orderTime" />
+    <result column="order_count" jdbcType="INTEGER" property="orderCount" />
+    <result column="order_band" jdbcType="VARCHAR" property="orderBand" />
+    <result column="order_barrel" jdbcType="INTEGER" property="orderBarrel" />
+    <association property="user" column="user_id" javaType="com.pm.entity.User" fetchType="lazy"
+    select="com.pm.personal.dao.UserDao.findUserById"></association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    water_id, user_id, order_time, order_count, order_band, order_barrel
+  </sql>
+
+  <select id="findCount" resultType="java.lang.Integer">
+    SELECT COUNT(water_id) FROM tb_sendwater
+  </select>
+  <select id="findAll" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from tb_sendwater
+  </select>
+
+  <delete id="deleteBatch" parameterType="java.lang.Integer">
+    delete from tb_sendwater where water_id in
+    <foreach item="waterId" collection="array" open="(" separator="," close=")">
+      #{waterId}
+    </foreach>
+  </delete>
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_sendwater
+    where water_id = #{waterId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_sendwater
+    where water_id = #{waterId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pm.entity.Sendwater">
+    insert into tb_sendwater (water_id, user_id, order_time,
+    order_count, order_band, order_barrel
+    )
+    values (#{waterId,jdbcType=INTEGER}, #{user.userId,jdbcType=INTEGER}, #{orderTime,jdbcType=DATE},
+    #{orderCount,jdbcType=INTEGER}, #{orderBand,jdbcType=VARCHAR}, #{orderBarrel,jdbcType=INTEGER}
+    )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pm.entity.Sendwater">
+    insert into tb_sendwater
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="waterId != null">
+        water_id,
+      </if>
+      <if test="user!=null and user.userId != null">
+        user_id,
+      </if>
+      <if test="orderTime != null">
+        order_time,
+      </if>
+      <if test="orderCount != null">
+        order_count,
+      </if>
+      <if test="orderBand != null">
+        order_band,
+      </if>
+      <if test="orderBarrel != null">
+        order_barrel,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="waterId != null">
+        #{waterId,jdbcType=INTEGER},
+      </if>
+      <if test="user!=null and user.userId != null">
+        #{user.userId,jdbcType=INTEGER},
+      </if>
+      <if test="orderTime != null">
+        #{orderTime,jdbcType=DATE},
+      </if>
+      <if test="orderCount != null">
+        #{orderCount,jdbcType=INTEGER},
+      </if>
+      <if test="orderBand != null">
+        #{orderBand,jdbcType=VARCHAR},
+      </if>
+      <if test="orderBarrel != null">
+        #{orderBarrel,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pm.entity.Sendwater">
+    update tb_sendwater
+    <set>
+      <if test="user!=null and user.userId != null">
+        user_id = #{user.userId,jdbcType=INTEGER},
+      </if>
+      <if test="orderTime != null">
+        order_time = #{orderTime,jdbcType=DATE},
+      </if>
+      <if test="orderCount != null">
+        order_count = #{orderCount,jdbcType=INTEGER},
+      </if>
+      <if test="orderBand != null">
+        order_band = #{orderBand,jdbcType=VARCHAR},
+      </if>
+      <if test="orderBarrel != null">
+        order_barrel = #{orderBarrel,jdbcType=INTEGER},
+      </if>
+    </set>
+    where water_id = #{waterId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pm.entity.Sendwater">
+    update tb_sendwater
+    set user_id = #{user.userId,jdbcType=INTEGER},
+      order_time = #{orderTime,jdbcType=DATE},
+      order_count = #{orderCount,jdbcType=INTEGER},
+      order_band = #{orderBand,jdbcType=VARCHAR},
+      order_barrel = #{orderBarrel,jdbcType=INTEGER}
+    where water_id = #{waterId,jdbcType=INTEGER}
+  </update>
+</mapper>

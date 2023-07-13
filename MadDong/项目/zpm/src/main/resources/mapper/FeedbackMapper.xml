@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.property.dao.FeedbackMapper">
+  <resultMap id="BaseResultMap" type="com.pm.entity.Feedback">
+    <id column="fbk_id" jdbcType="INTEGER" property="fbkId" />
+    <result column="fbk_time" jdbcType="TIMESTAMP" property="fbkTime" />
+    <result column="fbk_state" jdbcType="VARCHAR" property="fbkState" />
+    <association property="user" column="user_id" fetchType="lazy" javaType="com.pm.entity.User"
+                 select="com.pm.personal.dao.UserDao.findUserById"></association>
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.pm.entity.Feedback">
+    <result column="fbk_content" jdbcType="LONGVARCHAR" property="fbkContent" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    fbk_id, user_id, fbk_time, fbk_state
+  </sql>
+  <sql id="Blob_Column_List">
+    fbk_content
+  </sql>
+
+  <select id="findCount" resultType="java.lang.Integer">
+    SELECT COUNT(fbk_id) FROM tb_feedback
+  </select>
+  <select id="findAll" resultMap="ResultMapWithBLOBs">
+    SELECT
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_feedback
+  </select>
+  <delete id="deleteBatch" parameterType="java.lang.Integer">
+    delete from tb_feedback where fbk_id in
+    <foreach item="fbk_id" collection="array" open="(" separator="," close=")">
+      #{fbk_id}
+    </foreach>
+  </delete>
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_feedback
+    where fbk_id = #{fbkId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_feedback
+    where fbk_id = #{fbkId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pm.entity.Feedback" useGeneratedKeys="true" keyProperty="fbkId">
+    insert into tb_feedback (fbk_id, user_id, fbk_time,
+    fbk_state, fbk_content)
+    values (#{fbkId,jdbcType=INTEGER}, #{user.userId,jdbcType=INTEGER}, #{fbkTime,jdbcType=TIMESTAMP},
+    #{fbkState,jdbcType=VARCHAR}, #{fbkContent,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pm.entity.Feedback" useGeneratedKeys="true" keyProperty="fbkId">
+    insert into tb_feedback
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fbkId != null">
+        fbk_id,
+      </if>
+      <if test="user!=null and user.userId != null">
+        user_id,
+      </if>
+      <if test="fbkTime != null">
+        fbk_time,
+      </if>
+      <if test="fbkState != null">
+        fbk_state,
+      </if>
+      <if test="fbkContent != null">
+        fbk_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fbkId != null">
+        #{fbkId,jdbcType=INTEGER},
+      </if>
+      <if test="user!=null and user.userId != null">
+        #{user.userId,jdbcType=INTEGER},
+      </if>
+      <if test="fbkTime != null">
+        #{fbkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fbkState != null">
+        #{fbkState,jdbcType=VARCHAR},
+      </if>
+      <if test="fbkContent != null">
+        #{fbkContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pm.entity.Feedback">
+    update tb_feedback
+    <set>
+      <if test="user!=null and user.userId != null">
+        user_id = #{user.userId,jdbcType=INTEGER},
+      </if>
+      <if test="fbkTime != null">
+        fbk_time = #{fbkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fbkState != null">
+        fbk_state = #{fbkState,jdbcType=VARCHAR},
+      </if>
+      <if test="fbkContent != null">
+        fbk_content = #{fbkContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where fbk_id = #{fbkId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pm.entity.Feedback">
+    update tb_feedback
+    set user_id = #{user.userId,jdbcType=INTEGER},
+    fbk_time = #{fbkTime,jdbcType=TIMESTAMP},
+    fbk_state = #{fbkState,jdbcType=VARCHAR},
+    fbk_content = #{fbkContent,jdbcType=LONGVARCHAR}
+    where fbk_id = #{fbkId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pm.entity.Feedback">
+    update tb_feedback
+    set user_id = #{user.userId,jdbcType=INTEGER},
+      fbk_time = #{fbkTime,jdbcType=TIMESTAMP},
+      fbk_state = #{fbkState,jdbcType=VARCHAR}
+    where fbk_id = #{fbkId,jdbcType=INTEGER}
+  </update>
+</mapper>

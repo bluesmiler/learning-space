@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.comm.dao.CommentMapper">
+  <resultMap id="BaseResultMap" type="com.pm.entity.Comment">
+    <id column="comment_id" jdbcType="INTEGER" property="commentId" />
+    <result column="comment_time" jdbcType="TIMESTAMP" property="commentTime" />
+    <result column="help_id" jdbcType="INTEGER" property="helpId" />
+    <result column="comment_dianzan" jdbcType="INTEGER" property="commentDianzan" />
+    <result column="share_id" jdbcType="INTEGER" property="shareId" />
+    <result column="congress_hall_id" jdbcType="INTEGER" property="congressHallId" />
+    <result column="act_id" jdbcType="INTEGER" property="actId" />
+    <result column="good_id" jdbcType="INTEGER" property="goodId" />
+    <result column="comment_content"  property="commentContent" />
+    <association fetchType="lazy" column="user_id" property="user" javaType="com.pm.entity.User" select="com.pm.personal.dao.UserDao.findUserById" >
+    </association>
+    <collection fetchType="eager"  column="comment_id" property="replyList" javaType="java.util.List"   select="com.pm.comm.dao.ReplyMapper.findByCommentId" >
+    </collection>
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.pm.entity.Comment">
+
+  </resultMap>
+
+  <insert id="insert"  parameterType="com.pm.entity.Comment">
+    INSERT INTO tb_comment(comment_content,comment_time,user_id,congress_hall_id,comment_dianzan)
+    VALUES(#{commentContent},#{commentTime},#{user.userId},#{congressHallId},#{commentDianzan})
+  </insert>
+
+  <select id="findById" resultMap="BaseResultMap" resultType="com.pm.entity.Comment">
+    SELECT comment_id,comment_content,comment_time,user_id,congress_hall_id,comment_dianzan
+     FROM tb_comment WHERE congress_hall_id=#{congressHallId}
+  </select>
+
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pm.personal.dao.UnitDao">
+    <resultMap id="unitMap" type="unit">
+        <id column="unit_id" property="unitId" />
+        <result property="unitName" column="unit_name"/>
+        <result column="comm_id" property="commId"/>
+        <association property="comm"
+                    column="comm_id"
+                    select="com.pm.comm.dao.Commdao.findById"/>
+    </resultMap>
+
+
+
+    <select id="findAllByCommId" resultMap="unitMap">
+        SELECT unit_id,unit_name,comm_id FROM tb_unit WHERE comm_id=#{commId}
+    </select>
+
+
+    <select id="findUnitById" resultMap="unitMap">
+    SELECT unit_id,unit_name,comm_id FROM tb_unit WHERE unit_id=#{unitId}
+    </select>
+
+    <select id="findAll" resultMap="unitMap">
+        SELECT unit_id,unit_name,comm_id FROM tb_unit
+    </select>
+
+
+</mapper>
