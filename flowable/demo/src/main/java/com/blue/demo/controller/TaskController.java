@@ -1,15 +1,11 @@
 package com.blue.demo.controller;
 
-import org.apache.ibatis.annotations.Param;
 import org.flowable.engine.RuntimeService;
 import org.flowable.engine.TaskService;
-import org.flowable.engine.form.FormData;
 import org.flowable.task.api.Task;
 import org.flowable.task.api.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,8 +37,10 @@ public class TaskController {
     }
 
     @PutMapping("/handleTask")
-    public String handleTask(String taskId) {
-        taskService.complete(taskId);
+    public String handleTask(@RequestBody Map<String, Object> map) {
+        String taskId = (String) map.get("taskId");
+        Map data = (Map) map.get("data");
+        taskService.complete(taskId, data);
         return "success";
     }
 }
